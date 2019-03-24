@@ -1,0 +1,24 @@
+{
+  "name": "musictoolbox",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "^2.5.9",
+    "express": "~4.16.0",
+    "http-errors": "^1.6.3",
+    "jQuery": "^1.7.4",
+    "jade": "~1.11.0",
+    "lamejs": "^1.2.0",
+    "morgan": "~1.9.0",
+    "tone": "^13.4.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
