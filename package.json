@@ -7,10 +7,13 @@
     "devstart": "nodemon ./bin/www"
   },
   "dependencies": {
+    "blob": "0.0.5",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.5.9",
     "express": "~4.16.0",
+    "ffmpeg": "0.0.4",
+    "file-system": "^2.2.2",
     "http-errors": "^1.6.3",
     "jQuery": "^1.7.4",
     "jade": "~1.11.0",

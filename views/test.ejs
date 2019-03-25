@@ -43,15 +43,32 @@
         note++;
       }, '4n');
 
+      var url;
+      var blob;
+
       recorder.ondataavailable = evt => chunks.push(evt.data);
       recorder.onstop = evt => {
-        let blob = new Blob(chunks, { type: 'audio/mp3; codecs=opus' });
+        blob = new Blob(chunks, { type: 'audio/mp3; codecs=opus' });
         //audio.src = URL.createObjectURL(blob);
-        var url = window.URL.createObjectURL(blob);
+        url = window.URL.createObjectURL(blob);
         console.log('MP3 URl: ', url);
+
+        var saveData = (function () {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        return function (fileName) {
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+        }());
+
+        saveData("test.mp3");
       };
 
-      Tone.Transport.start();
+      
 
     }
     </script>

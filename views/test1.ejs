@@ -6,14 +6,19 @@
   <header>
     <div class="logo">
       <h1 class="textlogo"> Music Toolbox </h1>
+      <h1><%= specs %></h1>
     </div>
   </header>
   <body>
     <script src='/lamejs/lame.all.js'></script>
     <script src='/tone/build/Tone.js'></script>
     <script src='/jQuery/tmp/jquery.js'></script>
-    <!--<script> src='/javascripts/beatTone.js'</script>-->
-    <script>
+    <script src='/jQuery/tmp/jquery.js'></script>
+<!-- 1 -->    <!-- <script> src='/javascripts/beatTone.js'</script> -->
+    <script> 
+  
+
+// generate mp3
     channels = 1; //1 for mono or 2 for stereo
     sampleRate = 44100; //44.1khz (normal mp3 samplerate)
     kbps = 128; //encode 128kbps mp3
@@ -38,7 +43,45 @@
     }
 
     var blob = new Blob(mp3Data, {type: 'audio/mp3'});
+    console.log("blob is ready");
     var url = window.URL.createObjectURL(blob);
     console.log('MP3 URl: ', url);
+    console.log('type: '+blob.type);
+    
+
+    var saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (fileName) {
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+    }());
+
+    saveData("test.mp3");
+
+
+    // var reader = new FileReader();
+    // reader.onload = function(event){
+    //     var fd = new FormData();
+    //     fd.append('fname', 'test.txt');
+    //     fd.append('data', event.target.result);
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'upload.php',
+    //         data: fd,
+    //         processData: false,
+    //         contentType: false
+    //     }).done(function(data) {
+    //         // print the output from the upload.php script
+    //         console.log(data);
+    //     });
+    // };
+
+    // reader.readAsDataURL(blob);
+
     </script>
   </body>
