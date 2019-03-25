@@ -18,7 +18,7 @@
 </head>
 <body>
     <script type="text/javascript">
-        $(window).on("keyup", function(e) {
+        window.onload = function() {
             //load the buffer for use in the convolver
         var player = new Tone.Player().toMaster();
         var buffer;
@@ -58,9 +58,6 @@
             if (mp3buf.length > 0) {
                 mp3Data.push(mp3buf);
             }
-
-            console.log(mp3Data);
-
             var blob = new Blob(mp3Data, {type: 'audio/mp3'});
             var url = window.URL.createObjectURL(blob);
             console.log('MP3 URl: ', url);
@@ -79,7 +76,7 @@
 
             saveData("hola.mp3");
         })
-        })
+        }
         
     </script>
 </body>
