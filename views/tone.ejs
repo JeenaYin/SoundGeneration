@@ -4,12 +4,11 @@
   <meta charset="utf-8">
     <title>Drone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="icon" type="image/png" sizes="174x174" href="./favicon.png">
-
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2/webcomponents-bundle.js"></script>
     <script src='/jQuery/tmp/jquery.js'></script>
     <script src='/tone/build/Tone.js'></script>
     <script src='/lamejs/lame.all.js'></script>
+    <!-- <script src='/ffmpeg/lib/ffmpeg.js'></script> -->
     <!-- <script src="./js/tonejs-ui.js"></script> -->
     <style type="text/css">
         tone-button {
@@ -37,31 +36,30 @@
 
             player.start();
 
-            buffer = b;
             //1-dimensional Float32Array
 
-            channels = 1; //1 for mono or 2 for stereo
-            sampleRate = 44100; //44.1khz (normal mp3 samplerate)
-            kbps = 128; //encode 128kbps mp3
-            mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
+            mp3encoder = new lamejs.Mp3Encoder(2, 44100, 128);
             var mp3Data = [];
+            var left = (b.toArray())[0].map(n => n*32768); //one second of silence (get your data from the source you have)
 
-            samples = buffer.toArray();
+            var right = (b.toArray())[1].map(n => n*32768); //one second of silence (get your data from the source you have)
             sampleBlockSize = 1152; //can be anything but make it a multiple of 576 to make encoders life easier
 
-            for (var i = 0; i < samples.length; i += sampleBlockSize) {
-              sampleChunk = samples.slice(i, i + sampleBlockSize);
-              var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+            for (var i = 0; i < left.length; i += sampleBlockSize) {
+              leftChunk = left.slice(i, i + sampleBlockSize);
+              rightChunk = right.slice(i, i + sampleBlockSize);
+              var mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
               if (mp3buf.length > 0) {
-                  mp3Data.push(mp3buf);
+                mp3Data.push(mp3buf);
               }
             }
             var mp3buf = mp3encoder.flush();   //finish writing mp3
 
             if (mp3buf.length > 0) {
-                console.log("pushing buffer")
-                mp3Data.push(new Int8Array(mp3buf));
+                mp3Data.push(mp3buf);
             }
+
+            console.log(mp3Data);
 
             var blob = new Blob(mp3Data, {type: 'audio/mp3'});
             var url = window.URL.createObjectURL(blob);

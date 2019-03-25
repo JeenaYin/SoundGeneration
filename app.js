@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('fs');
+var ffmpeg = require('ffmpeg');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -28,6 +29,8 @@ app.use('/tone', express.static(__dirname + '/node_modules/tone/'));
 // So /tone is the mounting point of the /node_modules/tone/ directory.
 app.use('/jQuery', express.static(__dirname + '/node_modules/jQuery/'));
 app.use('/ffmpeg', express.static(__dirname + '/node_modules/ffmpeg/'));
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
