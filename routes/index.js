@@ -5,16 +5,15 @@ var exp = express();
 var router = express.Router();
 
 /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('test1');
-// });
+
 
 router.get('/drone-*', function(req, res, next) {
     console.log("received drone request");
     res.render('tone');
 });
 
-
+// router.get('/', function(req, res, next) {
+// });
 
 // router.get('/met-*', function(req, res, next) {
 //     console.log("receiving met request");
