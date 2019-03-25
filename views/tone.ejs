@@ -36,15 +36,9 @@
             player.buffer = b;
 
             player.start();
+
             buffer = b;
             //1-dimensional Float32Array
-            array = buffer.toArray();
-
-            // var blob = new Blob(array, {type: 'audio/mp3'});
-            // var bloburl = window.URL.createObjectURL(blob);
-            
-            
-
 
             channels = 1; //1 for mono or 2 for stereo
             sampleRate = 44100; //44.1khz (normal mp3 samplerate)
@@ -52,10 +46,9 @@
             mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
             var mp3Data = [];
 
-            samples = array; //one second of silence (get your data from the source you have)
+            samples = buffer.toArray();
             sampleBlockSize = 1152; //can be anything but make it a multiple of 576 to make encoders life easier
 
-            var mp3Data = [];
             for (var i = 0; i < samples.length; i += sampleBlockSize) {
               sampleChunk = samples.slice(i, i + sampleBlockSize);
               var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
@@ -66,6 +59,7 @@
             var mp3buf = mp3encoder.flush();   //finish writing mp3
 
             if (mp3buf.length > 0) {
+                console.log("pushing buffer")
                 mp3Data.push(new Int8Array(mp3buf));
             }
 
