@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2/webcomponents-bundle.js"></script>
     <script src='/jQuery/tmp/jquery.js'></script>
     <script src='/tone/build/Tone.js'></script>
+    <script src='/lamejs/lame.all.js'></script>
     <!-- <script src="./js/tonejs-ui.js"></script> -->
     <style type="text/css">
         tone-button {
@@ -23,8 +24,8 @@
         var player = new Tone.Player().toMaster();
         var buffer;
         var array;
-        var url = window.location.href
-        var specs = url.slice(url.indexOf("-")+1);
+        var wurl = window.location.href
+        var specs = wurl.slice(wurl.indexOf("-")+1);
         console.log("specs:" + specs);
 
         Tone.Offline(function(){
@@ -33,30 +34,58 @@
             //schedule their events
         }, 3).then(function(b){
             player.buffer = b;
-            //1-dimensional Float32Array
-            array = b.toArray();
+
             player.start();
             buffer = b;
+            //1-dimensional Float32Array
+            array = buffer.toArray();
 
-
-
-            var blob = new Blob(array, {type: 'audio/mp3'});
-            window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
+            // var blob = new Blob(array, {type: 'audio/mp3'});
+            // var bloburl = window.URL.createObjectURL(blob);
+            
             
 
+
+            channels = 1; //1 for mono or 2 for stereo
+            sampleRate = 44100; //44.1khz (normal mp3 samplerate)
+            kbps = 128; //encode 128kbps mp3
+            mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
+            var mp3Data = [];
+
+            samples = array; //one second of silence (get your data from the source you have)
+            sampleBlockSize = 1152; //can be anything but make it a multiple of 576 to make encoders life easier
+
+            var mp3Data = [];
+            for (var i = 0; i < samples.length; i += sampleBlockSize) {
+              sampleChunk = samples.slice(i, i + sampleBlockSize);
+              var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+              if (mp3buf.length > 0) {
+                  mp3Data.push(mp3buf);
+              }
+            }
+            var mp3buf = mp3encoder.flush();   //finish writing mp3
+
+            if (mp3buf.length > 0) {
+                mp3Data.push(new Int8Array(mp3buf));
+            }
+
+            var blob = new Blob(mp3Data, {type: 'audio/mp3'});
+            var url = window.URL.createObjectURL(blob);
+            console.log('MP3 URl: ', url);
+
             var saveData = (function () {
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            return function (fileName) {
-                a.href = url;
-                a.download = fileName;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            };
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                return function (fileName) {
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                };
             }());
 
-            saveData("test.mp3");
+            saveData("hola.mp3");
         })
         })
         
