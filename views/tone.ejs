@@ -8,6 +8,10 @@
     <script src='/jQuery/tmp/jquery.js'></script>
     <script src='/tone/build/Tone.js'></script>
     <script src='/lamejs/lame.all.js'></script>
+    <audio id="myAudio" controls>
+      <source id="mp3_src" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
     <!-- <script src='/ffmpeg/lib/ffmpeg.js'></script> -->
     <!-- <script src="./js/tonejs-ui.js"></script> -->
     <style type="text/css">
@@ -70,14 +74,16 @@
                     a.href = url;
                     a.download = fileName;
                     a.click();
-                    window.URL.revokeObjectURL(url);
+                    //window.URL.revokeObjectURL(url);
+                    document.getElementById("mp3_src").src = url;
+                    document.getElementById("myAudio").load();
                 };
             }());
 
             saveData("hola.mp3");
         })
         }
-        
+
     </script>
 </body>
 </html>
