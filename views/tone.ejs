@@ -31,7 +31,7 @@
             //only nodes created in this callback will be recorded
             var oscillator = new Tone.Oscillator(specs).toMaster().start(0)
             //schedule their events
-        }, 3).then(function(b){
+        }, 5).then(function(b){
             player.buffer = b;
 
             player.start();
