@@ -38,10 +38,6 @@
         }, 2).then(function(b){
             player.buffer = b;
 
-            // player.start();
-
-            //1-dimensional Float32Array
-
             mp3encoder = new lamejs.Mp3Encoder(2, 44100, 128);
             var mp3Data = [];
             var left = (b.toArray())[0].map(n => n*32768); //one second of silence (get your data from the source you have)
@@ -64,66 +60,9 @@
             }
             var blob = new Blob(mp3Data, {type: 'audio/mp3'});
             var url = window.URL.createObjectURL(blob);
-<<<<<<< HEAD
-            console.log('MP3 URl: ', url);
 
-            var saveData = (function () {
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                a.style = "display: none";
-                return function (fileName) {
-                    a.href = url;
-                    a.download = fileName;
-                    a.click();
-                    //window.URL.revokeObjectURL(url);
-                    document.getElementById("mp3_src").src = url;
-                    document.getElementById("myAudio").load();
-                };
-            }());
-
-            saveData("hola.mp3");
-=======
 
             window.open(url);
-
-            // var xhr = new XMLHttpRequest;
-            // xhr.responseType = 'blob';
-
-            // xhr.onload = function() {
-            //    var recoveredBlob = xhr.response;
-
-            //    var reader = new FileReader;
-
-            //    reader.onload = function() {
-            //      var blobAsDataUrl = reader.result;
-            //      window.location = blobAsDataUrl;
-            //    };
-
-            //    reader.readAsDataURL(recoveredBlob);
-            // };
-
-            // xhr.open('GET', url);
-            // xhr.send();
-
-
-
-
-            // console.log('MP3 URl: ', url);
-
-            // var saveData = (function () {
-            //     var a = document.createElement("a");
-            //     document.body.appendChild(a);
-            //     a.style = "display: none";
-            //     return function (fileName) {
-            //         a.href = url;
-            //         // a.download = fileName;
-            //         a.click();
-            //         window.URL.revokeObjectURL(url);
-            //     };
-            // }());
-
-            // saveData("hola.mp3");
->>>>>>> f83dc6c455261c34f601bcc68e7728362e5c1b94
         })
         }
 
