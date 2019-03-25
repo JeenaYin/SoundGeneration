@@ -11,10 +11,8 @@ var router = express.Router();
 // });
 
 router.get('/drone-*', function(req, res, next) {
-    // parse url request
     console.log("received drone request");
     res.render('tone');
-
 });
 
 
